@@ -422,9 +422,9 @@ textarea.code{font-family:ui-monospace,'Cascadia Code',Consolas,monospace;font-s
 /* ═════════════ CONFIG: edit these before deploying ═════════════ */
 const CONFIG = {
   // Google Apps Script web-app URL (see README). Empty = candidates download a file and email it.
-  SUBMIT_URL: "",
+  SUBMIT_URL: "https://script.google.com/macros/s/AKfycbyuUiFAe8qsogxOP8CuLxdUHDyLemvK_kE4oSJl86lc8-2Ah_PlfAo9QgF0BgOCWHzA/exec",
   // Shown to candidates for questions.
-  CONTACT_EMAIL: "",
+  CONTACT_EMAIL: "z5590330@ad.unsw.edu.au",
 };
 /* ═══════════════════════════════════════════════════════════════ */
 
@@ -527,9 +527,10 @@ function log(type, data){ S.events.push({t:Date.now(), type, ...(data||{})}); if
 /* ───────── network ───────── */
 function send(payload){
   if(PREVIEW || !CONFIG.SUBMIT_URL) return Promise.resolve(false);
-  // text/plain keeps this a simple request; Apps Script reads the raw body.
-  return fetch(CONFIG.SUBMIT_URL, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload)})
-    .then(()=>true).catch(()=>false);
+  // text/plain keeps this a simple request with no preflight. Apps Script replies through a redirect that any
+  // origin can read, so success is reported only when the script confirms it saved the submission.
+  return fetch(CONFIG.SUBMIT_URL, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload)})
+    .then(r=>r.json()).then(j=>!!(j && j.ok)).catch(()=>false);
 }
 
 /* ───────── screens ───────── */
