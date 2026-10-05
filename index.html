@@ -156,6 +156,7 @@ textarea.code{font-family:ui-monospace,'Cascadia Code',Consolas,monospace;font-s
 .summary div{display:flex;justify-content:space-between;gap:16px;padding:12px 16px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
 .summary b{font-weight:500}
 .done{padding-block:90px;max-width:680px;display:flex;flex-direction:column;gap:18px}
+ol.steps{margin:0;padding-left:22px;color:var(--mid)} ol.steps li{margin:8px 0} ol.steps b{color:var(--ink);font-weight:500;word-break:break-all}
 
 @media (max-width:900px){
   .intro,.brief,.codegrid,.makegrid{grid-template-columns:1fr}
@@ -199,7 +200,8 @@ textarea.code{font-family:ui-monospace,'Cascadia Code',Consolas,monospace;font-s
 
     <section>
       <h3>Submission</h3>
-      <p>When you finish, go to the Submit tab and click Submit. You do not need to send a file or an email.</p>
+      <p>When you finish, go to the Submit tab and click Submit. The page downloads a file with your answers.</p>
+      <p>Upload this file to your application folder on SharePoint. We mark only the files that are in your folder.</p>
     </section>
 
     <section>
@@ -392,10 +394,10 @@ textarea.code{font-family:ui-monospace,'Cascadia Code',Consolas,monospace;font-s
       <div class="sechead">
         <p class="eyebrow">Finish</p>
         <h2>Submit</h2>
-        <p>Check your work. Then click Submit. You can submit before the time ends.</p>
+        <p>Check your work. Then click Submit. The page downloads a file with your answers. Upload that file to your application folder on SharePoint.</p>
       </div>
       <div class="summary" id="summary"></div>
-      <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap"><button class="btn primary" id="submitBtn">Submit my test</button></div>
+      <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap"><button class="btn primary" id="submitBtn">Submit and download my file</button></div>
       <p class="err" id="submitErr" role="alert" style="margin-top:10px"></p>
     </section>
   </main>
@@ -403,14 +405,15 @@ textarea.code{font-family:ui-monospace,'Cascadia Code',Consolas,monospace;font-s
 
 <!-- ───────────── DONE ───────────── -->
 <div id="done" class="wrap done" hidden>
-  <p class="eyebrow">Finished</p>
-  <h1 id="doneTitle">Thank you. We have your test.</h1>
-  <p class="muted" id="doneText"></p>
-  <div id="doneFallback" class="card" style="padding:18px;display:grid;gap:12px" hidden>
-    <p id="fallbackText"></p>
-    <div><button class="btn small" id="resendBtn" type="button">Try to send again</button></div>
-  </div>
-  <div><button class="btn" id="downloadBtn">Download a copy of your answers</button></div>
+  <p class="eyebrow">Last step</p>
+  <h1 id="doneTitle">Upload your file</h1>
+  <ol class="steps" id="doneSteps">
+    <li>Find <b id="doneFile"></b> in your Downloads folder.</li>
+    <li>Upload the file to your application folder on SharePoint.</li>
+    <li>Do not change the file.</li>
+  </ol>
+  <p class="muted" id="doneText">Your test is complete only when the file is in your folder.</p>
+  <div><button class="btn primary" id="downloadBtn">Download the file again</button></div>
 </div>
 
 <dialog class="lb" id="lightbox">
@@ -421,8 +424,9 @@ textarea.code{font-family:ui-monospace,'Cascadia Code',Consolas,monospace;font-s
 <script>
 /* ═════════════ CONFIG: edit these before deploying ═════════════ */
 const CONFIG = {
-  // Google Apps Script web-app URL (see README). Empty = candidates download a file and email it.
-  SUBMIT_URL: "https://script.google.com/macros/s/AKfycbyuUiFAe8qsogxOP8CuLxdUHDyLemvK_kE4oSJl86lc8-2Ah_PlfAo9QgF0BgOCWHzA/exec",
+  // Optional backup: a Google Apps Script web app that also logs each start and submission (see README).
+  // The candidate's uploaded file is the submission. Set to "" to switch the backup off.
+  SUBMIT_URL: "https://script.google.com/macros/s/AKfycbzgstmblWHpa1FFfpqV1XsNMrvxw1uRgBkpaDdSxNdslq7F5x9oMWgd0h8hY9kpMFTajw/exec",
   // Shown to candidates for questions.
   CONTACT_EMAIL: "z5590330@ad.unsw.edu.au",
 };
@@ -824,26 +828,19 @@ async function submit(reason){
   if(submitting || S.stage!=="test") return; submitting = true;
   clearInterval(window.__t);
   account(); S.submittedAt = Date.now(); S.submitReason = reason; S.stage = "done"; S.sent = false; log("submit", {reason}); save();
-  S.sent = await send(payload()); save();
+  downloadFile();                                   // straight away, while the click still counts as the person's action
   showDone();
+  S.sent = await send(payload()); save();           // backup copy; the uploaded file is what counts
 }
+function fileName(){ return `SR8-Infotainment-${S.candidate.zid || "submission"}.json`; }
 function showDone(){
   show("done");
-  const ok = S.sent && !PREVIEW;
-  $("#doneTitle").textContent = PREVIEW ? "Preview finished." : ok ? "Thank you. We have your test." : "Your test is finished.";
-  $("#doneText").textContent = PREVIEW ? "The page did not send anything. Download the file to see what a submission contains."
-    : ok ? "You do not need to send anything else. We will contact you about interviews after applications close." : "";
-  $("#doneText").hidden = !$("#doneText").textContent;
-  $("#doneFallback").hidden = ok || PREVIEW;
-  $("#fallbackText").innerHTML = (CONFIG.SUBMIT_URL ? "The page could not send your test." : "Online submission is off for this copy of the test.")
-    + ` Download your answers. Then email the file to <b>${esc(CONFIG.CONTACT_EMAIL || "the infotainment lead")}</b>.`;
-  $("#resendBtn").hidden = !CONFIG.SUBMIT_URL;
+  $("#doneFile").textContent = fileName();
+  if(PREVIEW){
+    $("#doneTitle").textContent = "Preview finished";
+    $("#doneText").textContent = "The page did not send anything. The file shows what a submission contains.";
+  }
 }
-$("#resendBtn").addEventListener("click", async ()=>{
-  $("#resendBtn").disabled = true;
-  S.sent = await send(payload()); save(); showDone();
-  $("#resendBtn").disabled = false;
-});
 function payload(){
   const mins = ms=>+((ms||0)/60000).toFixed(2);
   return {type:"submit", version:VERSION, candidate:S.candidate,
@@ -857,11 +854,13 @@ function payload(){
     make:{image:S.make.image, decision:S.make.decision, rejected:S.make.rejected, ai:S.make.ai},
     events:S.events, userAgent:navigator.userAgent};
 }
-$("#downloadBtn").addEventListener("click", ()=>{
+function downloadFile(){
   const blob = new Blob([JSON.stringify(payload(), null, 2)], {type:"application/json"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-  a.download = `sr8-infotainment-${S.candidate.zid||"submission"}.json`; document.body.appendChild(a); a.click(); a.remove();
-});
+  a.download = fileName(); document.body.appendChild(a); a.click(); a.remove();
+  log("download"); save();
+}
+$("#downloadBtn").addEventListener("click", downloadFile);
 
 /* ───────── boot ───────── */
 if(S.stage==="test") enterTest(true);
