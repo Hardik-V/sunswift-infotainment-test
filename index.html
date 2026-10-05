@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sunswift Infotainment Aptitude Test</title>
+<meta name="description" content="An aptitude test for the Sunswift SR8 infotainment team.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Oswald:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#0A0A0B; --panel:#131315; --panel2:#1A1A1D; --ink:#EDEDED; --mid:#A39E97; --dim:#6E6963;
+  --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16); --acc:#FFA920; --ok:#2DAA6E; --bad:#E0464E; --amber:#EBBB6E;
+  --h2:#FF8A1F; --caution:#F2C14E; --go:#34C77B;
+  --r:10px;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink)}
+body{margin:0;font:16px/1.55 Jost,'Segoe UI',system-ui,sans-serif}
+a{color:var(--acc)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-weight:400;letter-spacing:.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,4.5vw,48px);font-weight:300}
+h2{font-size:clamp(24px,3vw,32px);font-weight:300}
+h3{font-size:19px;font-weight:500}
+p{margin:0}
+.muted{color:var(--mid)} .dim{color:var(--dim)}
+.eyebrow{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--mid)}
+.btn{border:1px solid var(--line2);background:transparent;border-radius:999px;padding:10px 20px;cursor:pointer;letter-spacing:.06em}
+.btn:hover{border-color:var(--mid)}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:#111;font-weight:500}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.small{padding:6px 14px;font-size:14px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary:disabled:hover{filter:none}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:14px;color:var(--mid)}
+input[type=text],input[type=email],select,textarea{background:var(--panel2);border:1px solid var(--line2);border-radius:8px;padding:10px 12px;width:100%}
+textarea{resize:vertical;min-height:84px}
+.err{color:var(--bad);font-size:14px;min-height:1.2em}
+.banner{background:#2A2112;border-bottom:1px solid #5A4520;color:var(--amber);font-size:14px;text-align:center;padding:8px 16px}
+[hidden]{display:none!important}
+
+/* intro */
+.intro{padding-block:56px 80px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:48px}
+.intro section{margin-top:30px}
+.intro section h3{margin-bottom:8px}
+.intro section p{color:var(--mid);max-width:64ch}
+.intro section p+p{margin-top:8px}
+.parts{display:grid;gap:10px;margin:12px 0 14px}
+.parts div{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:baseline;border-top:1px solid var(--line);padding-top:10px}
+.parts b{font-family:Oswald,sans-serif;font-weight:500;color:var(--acc)}
+.parts span:last-child{color:var(--mid);font-variant-numeric:tabular-nums}
+ul.plain{margin:0;padding-left:18px;color:var(--mid)} ul.plain li{margin:6px 0}
+.startcard{padding:26px;display:flex;flex-direction:column;gap:14px;align-self:start;position:sticky;top:24px}
+.check{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{width:18px;height:18px;margin:3px 0 0;accent-color:var(--acc);flex:none;cursor:pointer}
+
+/* test header */
+.top{position:sticky;top:0;z-index:20;background:rgba(10,10,11,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.top .wrap{display:flex;align-items:center;gap:16px;min-height:60px;flex-wrap:wrap;padding-block:6px}
+.brand{font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:var(--mid);white-space:nowrap}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav.tabs button{border:1px solid transparent;background:transparent;border-radius:999px;padding:7px 14px;cursor:pointer;color:var(--mid);font-size:15px}
+nav.tabs button[aria-selected=true]{border-color:var(--line2);color:var(--ink);background:var(--panel2)}
+nav.tabs button .tick{color:var(--ok);margin-left:6px}
+main.test{padding-block:32px 96px}
+.sechead{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;max-width:78ch}
+.sechead p{color:var(--mid)}
+
+/* brief */
+.brief{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
+.rules{counter-reset:r;list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rules li{counter-increment:r;display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:baseline;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+.rules li::before{content:counter(r);font-family:Oswald,sans-serif;font-size:20px;color:var(--acc)}
+.rules li span{color:var(--mid);font-size:14px;display:block}
+
+/* rank */
+.rankgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,520px),1fr));gap:16px}
+.design{padding:12px;display:flex;flex-direction:column;gap:10px}
+.design.ranked{border-color:rgba(255,169,32,.45)}
+.shot{position:relative;border-radius:8px;overflow:hidden;background:#000;border:1px solid var(--line)}
+.shot img{display:block;width:100%;height:auto}
+.shot .tag{position:absolute;left:10px;top:8px;font-family:Oswald,sans-serif;font-size:18px;background:rgba(0,0,0,.7);border-radius:6px;padding:0 10px}
+.zoom{position:absolute;right:8px;top:8px;background:rgba(0,0,0,.7);border:1px solid var(--line2);border-radius:6px;padding:2px 10px;font-size:13px;cursor:zoom-in;color:var(--ink)}
+.rankbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rankbar .lbl{font-size:13px;color:var(--mid);margin-right:4px}
+.rankbar button{width:40px;height:36px;border-radius:8px;border:1px solid var(--line2);background:transparent;cursor:pointer;font-family:Oswald,sans-serif;font-size:17px;color:var(--mid)}
+.rankbar button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#111}
+.rankbar .ends{font-size:12px;color:var(--dim);margin-left:4px}
+dialog.lb{border:0;padding:0;background:transparent;max-width:min(98vw,1920px)}
+dialog.lb::backdrop{background:rgba(0,0,0,.92)}
+dialog.lb img{display:block;max-width:98vw;max-height:86vh;width:auto;height:auto}
+dialog.lb .bar{display:flex;justify-content:space-between;align-items:center;padding:10px 2px;color:var(--mid)}
+
+/* arrange */
+.stage{position:relative;width:100%;aspect-ratio:1920/720;background:radial-gradient(ellipse 70% 90% at 50% 45%,#141518 0%,#08080A 70%);border:1px solid var(--line2);border-radius:12px;touch-action:none}
+.stagecap{font-size:12px;color:var(--dim);letter-spacing:.12em;margin-top:6px;text-align:right}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;min-height:64px;padding:12px;border:1px dashed var(--line2);border-radius:12px;align-items:center}
+.tray:empty::before{content:"All the items are on the display.";color:var(--dim);font-size:14px}
+.chip{user-select:none;touch-action:none;cursor:grab;border-radius:8px;background:var(--panel2);border:1px solid var(--line2);padding:6px 12px;display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;white-space:nowrap;font-size:16px}
+.chip:active{cursor:grabbing}
+.chip .l{font-size:1em;display:inline-flex;align-items:center;gap:.25em}
+.chip .s{font-size:10.5px;color:var(--mid);letter-spacing:.08em;text-transform:uppercase;margin-top:3px}
+.chip .bar{display:block;width:52px;height:3px;border-radius:2px;background:rgba(255,255,255,.14);margin-top:5px;overflow:hidden}
+.chip .bar i{display:block;height:100%}
+.chip svg{width:1em;height:1em;display:block}
+.chip.num .l,.chip.drive .l,.chip.h2 .l,.chip.bat .l,.chip.ok .l{font-family:Oswald,sans-serif;font-weight:500;letter-spacing:.02em}
+.chip.drive i{font-style:normal;color:#6E6963} .chip.drive b{font-weight:700;color:#fff}
+.chip.h2 .l{color:var(--h2)} .chip.h2 .bar i{background:var(--h2)}
+.chip.bat .l{color:#F4F4F4} .chip.bat .bar i{background:#F4F4F4}
+.chip.warn .l{color:var(--caution);letter-spacing:.12em;font-weight:500}
+.chip.fault .l{color:var(--bad);letter-spacing:.12em;font-weight:500}
+.chip.red .l{color:var(--bad)}
+.chip.go .l,.chip.ok .l{color:var(--go)}
+.chip.ok .l{letter-spacing:.14em}
+.chip.lamps .l{gap:5px}
+.chip.lamps i{font-style:normal;font-size:10px;letter-spacing:.06em;padding:3px 5px;border:1px solid rgba(255,255,255,.12);border-radius:4px;color:#5E5A55}
+.chip.lamps i.on{color:var(--go);border-color:rgba(52,199,123,.45)}
+/* on the display, every part of an item scales with its size */
+.placed{position:absolute;transform:translate(-50%,-50%);background:rgba(26,26,29,.5);border-color:rgba(255,255,255,.1);padding:.14em .32em;border-radius:min(.2em,10px);font-size:calc(var(--fs) * var(--k))}
+.placed .s{font-size:.3em;margin-top:.15em}
+.placed .bar{width:3.2em;height:.12em;margin-top:.2em}
+.placed.lamps .l{gap:.3em}
+.placed.lamps i{font-size:.5em;padding:.3em .5em;border-radius:.35em}
+.placed .ctl{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);display:none;gap:4px;padding-bottom:6px}
+.placed.below .ctl{bottom:auto;top:100%;padding:6px 0 0}
+.placed.sel{border-color:var(--acc);z-index:5}
+.placed.sel .ctl,.placed:hover .ctl{display:flex}
+.placed .ctl button{width:24px;height:24px;border-radius:50%;border:1px solid var(--line2);background:#000;color:var(--ink);font-size:12px;line-height:1;cursor:pointer;padding:0}
+.ghost{position:fixed;pointer-events:none;z-index:50;opacity:.85;transform:translate(-50%,-50%)}
+
+/* code */
+.codegrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:20px;align-items:start}
+.fn{padding:20px;margin-bottom:22px}
+.spec{margin:10px 0 0;padding-left:20px;color:var(--mid)} .spec li{margin:6px 0}
+.spec code,.inline{font-family:ui-monospace,Consolas,monospace;font-size:14px;color:var(--ink);background:var(--panel2);border-radius:4px;padding:1px 5px}
+textarea.code{font-family:ui-monospace,'Cascadia Code',Consolas,monospace;font-size:14px;line-height:1.5;min-height:260px;tab-size:2;white-space:pre;background:#0E0E10}
+.checks{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px;font-size:14px}
+.checks li{display:grid;grid-template-columns:22px 1fr;gap:8px;padding:8px 10px;background:var(--panel2);border-radius:6px}
+.checks li.pass::before{content:"✓";color:var(--ok)} .checks li.fail::before{content:"✕";color:var(--bad)}
+.checks code{font-family:ui-monospace,Consolas,monospace;font-size:13px}
+
+/* make */
+.makegrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.drop{border:1px dashed var(--line2);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.drop img{max-width:100%;border-radius:8px;border:1px solid var(--line)}
+.req{margin:10px 0 0;padding-left:20px;color:var(--mid)} .req li{margin:5px 0}
+
+/* submit */
+.summary{display:grid;gap:10px;max-width:640px}
+.summary div{display:flex;justify-content:space-between;gap:16px;padding:12px 16px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+.summary b{font-weight:500}
+.done{padding-block:90px;max-width:680px;display:flex;flex-direction:column;gap:18px}
+
+@media (max-width:900px){
+  .intro,.brief,.codegrid,.makegrid{grid-template-columns:1fr}
+  .startcard{position:static}
+}
+@media (prefers-reduced-motion:no-preference){.rankbar button,.btn,nav.tabs button{transition:border-color .15s,background .15s,color .15s}}
+</style>
+</head>
+<body>
+<div id="previewBanner" class="banner" hidden>Preview mode. The page does not submit anything.</div>
+
+<!-- ───────────── INTRO ───────────── -->
+<div id="intro" class="wrap intro" hidden>
+  <div>
+    <p class="eyebrow">Sunswift Racing · Infotainment</p>
+    <h1 style="margin-top:10px">Infotainment aptitude test</h1>
+
+    <section>
+      <h3>Background</h3>
+      <p>Sunswift 8 (SR8) is a road-legal solar, hydrogen and battery car. It has two displays. The driver display is behind the steering wheel. The centre display is in the middle of the dashboard.</p>
+      <p>The infotainment team designs and builds the software for the two displays. This test is about the driver display.</p>
+    </section>
+
+    <section>
+      <h3>Task</h3>
+      <p>The test has four parts:</p>
+      <div class="parts">
+        <div><b>1</b><span>Rank five designs</span><span>8 min</span></div>
+        <div><b>2</b><span>Arrange a driver display</span><span>12 min</span></div>
+        <div><b>3</b><span>Write two small functions</span><span>10 min</span></div>
+        <div><b>4</b><span>Design a screen</span><span>15 min</span></div>
+      </div>
+      <p>You can do the parts in any order. The times are a guide.</p>
+    </section>
+
+    <section>
+      <h3>Time</h3>
+      <p>There is no time limit. The test takes about 45 minutes.</p>
+      <p>The page saves your work in this browser. You can close the page and continue later in the same browser.</p>
+    </section>
+
+    <section>
+      <h3>Submission</h3>
+      <p>When you finish, go to the Submit tab and click Submit. You do not need to send a file or an email.</p>
+    </section>
+
+    <section>
+      <h3>Rules</h3>
+      <ul class="plain">
+        <li>Do the test without help from other people. You can use AI tools.</li>
+        <li>You do not need coding or Figma experience.</li>
+      </ul>
+    </section>
+  </div>
+
+  <form class="card startcard" id="startForm" novalidate>
+    <h3>Start the test</h3>
+    <div class="field"><label for="fName">Full name</label><input id="fName" type="text" autocomplete="name" required></div>
+    <div class="field"><label for="fZid">zID</label><input id="fZid" type="text" placeholder="z1234567" autocomplete="off" required></div>
+    <div class="field"><label for="fEmail">Email</label><input id="fEmail" type="email" autocomplete="email" required></div>
+    <div class="field"><label for="fYear">Year of study</label>
+      <select id="fYear" required><option value="">Choose</option><option>1st year</option><option>2nd year</option><option>3rd year</option><option>4th year</option><option>5th year or later</option><option>Postgraduate</option></select></div>
+    <label class="check" for="fRead"><input type="checkbox" id="fRead"><span>I have read the instructions.</span></label>
+    <p class="err" id="startErr" role="alert"></p>
+    <button class="btn primary" type="submit" id="startBtn">Start the test</button>
+    <p class="dim" style="font-size:13px" id="contactLine"></p>
+  </form>
+</div>
+
+<!-- ───────────── TEST ───────────── -->
+<div id="test" hidden>
+  <header class="top">
+    <div class="wrap">
+      <span class="brand">SR8 · Infotainment</span>
+      <nav class="tabs" role="tablist" aria-label="Test parts">
+        <button role="tab" data-tab="brief">Brief</button>
+        <button role="tab" data-tab="rank">1 Rank</button>
+        <button role="tab" data-tab="arrange">2 Arrange</button>
+        <button role="tab" data-tab="code">3 Code</button>
+        <button role="tab" data-tab="make">4 Design</button>
+        <button role="tab" data-tab="submit">Submit</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="test wrap">
+    <!-- BRIEF -->
+    <section data-panel="brief" hidden>
+      <div class="sechead">
+        <p class="eyebrow">Read this first</p>
+        <h2>The brief</h2>
+        <p>The driver display is behind the steering wheel. It is 1920 × 720 pixels. The driver reads it in less than two seconds, often in sunlight.</p>
+        <p>We mark all four parts against these rules. The rules stay on the Brief tab.</p>
+      </div>
+      <div class="brief">
+        <ol class="rules">
+          <li><div>Speed is the most important item. Make it the biggest item. Put it in the centre, straight ahead of the driver.</div></li>
+          <li><div>Use red only for a danger. Use amber only for a caution.</div></li>
+          <li><div>Hydrogen is always orange. The battery is always white.</div></li>
+          <li><div>Show each fact one time only.</div></li>
+          <li><div>A warning shows the problem in words.<span>For example: REAR LEFT 24 PSI, not only a symbol.</span></div></li>
+        </ol>
+        <ol class="rules" style="counter-reset:r 5">
+          <li><div>The driver display does not chat or entertain.<span>No messages, social media, music or video.</span></div></li>
+          <li><div>The driver reads the display but does not touch it.<span>No buttons, menus or scrolling.</span></div></li>
+          <li><div>Items do not overlap or touch.</div></li>
+          <li><div>The speedometer can show more than the true speed, but never less.</div></li>
+        </ol>
+      </div>
+      <div style="margin-top:28px"><button class="btn primary" data-goto="rank">Start part 1</button></div>
+    </section>
+
+    <!-- RANK -->
+    <section data-panel="rank" hidden>
+      <div class="sechead">
+        <p class="eyebrow">Part 1 · about 8 minutes</p>
+        <h2>Rank the designs</h2>
+        <p>Rank the five designs for the driver, from 1 (best) to 5 (worst). Use the brief.</p>
+      </div>
+      <div id="rankList" class="rankgrid"></div>
+      <div class="card" style="padding:20px;margin-top:18px;display:grid;gap:14px;max-width:880px">
+        <div class="field"><label for="rankBest">Why is your number 1 the best?</label><input type="text" id="rankBest" maxlength="240" autocomplete="off"></div>
+        <div class="field"><label for="rankWorst">Why is your number 5 the worst?</label><input type="text" id="rankWorst" maxlength="240" autocomplete="off"></div>
+      </div>
+      <div style="margin-top:18px"><button class="btn" data-goto="arrange">Next: Arrange</button></div>
+    </section>
+
+    <!-- ARRANGE -->
+    <section data-panel="arrange" hidden>
+      <div class="sechead">
+        <p class="eyebrow">Part 2 · about 12 minutes</p>
+        <h2>Arrange the display</h2>
+        <p>This is the busiest moment for the driver display. The car is at 90 km/h, navigation is on, and there are two warnings.</p>
+        <p>Put each item that follows the brief on the display. Leave off each item that breaks the brief. Then arrange the display so that the driver can read it in two seconds.</p>
+        <p class="dim">Drag items onto the display. Click an item on the display to change its size or to remove it.</p>
+      </div>
+      <div class="stage" id="stage" aria-label="Driver display"></div>
+      <p class="stagecap">Driver display · 1920 × 720</p>
+      <div class="tray" id="tray" aria-label="Items that are not on the display"></div>
+      <div class="field" style="margin-top:18px;max-width:760px">
+        <label for="arrNote">What did you leave off, and why?</label>
+        <textarea id="arrNote" maxlength="500"></textarea>
+      </div>
+      <div style="margin-top:18px"><button class="btn" data-goto="code">Next: Code</button></div>
+    </section>
+
+    <!-- CODE -->
+    <section data-panel="code" hidden>
+      <div class="sechead">
+        <p class="eyebrow">Part 3 · about 10 minutes</p>
+        <h2>Write two functions</h2>
+        <p>Write each function yourself, or use AI. Some checks are hidden. They run after you submit, so make sure that your code follows each line of the spec.</p>
+      </div>
+
+      <div class="card fn">
+        <div class="codegrid">
+          <div>
+            <h3>speedText(reading)</h3>
+            <p class="muted" style="margin-top:6px">Returns the text that the speedometer shows. <span class="inline">reading.kmh</span> is the true speed from the wheel sensors. <span class="inline">reading.ageMs</span> is the age of the reading in milliseconds.</p>
+            <ol class="spec">
+              <li>Show a whole number that is never less than the true speed.</li>
+              <li>When the car reverses, the speed is negative. Show the speed without the minus sign.</li>
+              <li>If the reading is older than 500 ms, show <code>--</code>. If the speed is missing or is not a number, show <code>--</code>.</li>
+              <li>Show only the digits, or <code>--</code>. Do not show units or spaces.</li>
+            </ol>
+          </div>
+          <div>
+            <label class="dim" for="code1" style="font-size:13px">Your code</label>
+            <textarea class="code" id="code1" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+            <div style="display:flex;gap:10px;margin-top:10px;align-items:center"><button class="btn small primary" data-run="speedText">Run visible checks</button><button class="btn small" data-reset="speedText">Reset code</button></div>
+            <ul class="checks" id="checks-speedText"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card fn">
+        <div class="codegrid">
+          <div>
+            <h3>tyreWarning(kpa)</h3>
+            <p class="muted" style="margin-top:6px">Returns the warning text that the display shows. <span class="inline">kpa</span> has the four tyre pressures in kilopascals: <span class="inline">fl</span>, <span class="inline">fr</span>, <span class="inline">rl</span> and <span class="inline">rr</span> (front left, front right, rear left and rear right). If a sensor has failed, its value is <span class="inline">null</span>.</p>
+            <ol class="spec">
+              <li>Warn when a tyre is below 26 psi. 1 psi is 6.895 kPa.</li>
+              <li>If more than one tyre is low, show only the lowest tyre.</li>
+              <li>Use this format: the tyre name in capitals, the pressure in psi rounded to the nearest whole number, then PSI. For example: <code>REAR LEFT 24 PSI</code>. The tyre names are FRONT LEFT, FRONT RIGHT, REAR LEFT and REAR RIGHT.</li>
+              <li>Ignore failed sensors.</li>
+              <li>If no tyre is low, return an empty string.</li>
+            </ol>
+          </div>
+          <div>
+            <label class="dim" for="code2" style="font-size:13px">Your code</label>
+            <textarea class="code" id="code2" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+            <div style="display:flex;gap:10px;margin-top:10px;align-items:center"><button class="btn small primary" data-run="tyreWarning">Run visible checks</button><button class="btn small" data-reset="tyreWarning">Reset code</button></div>
+            <ul class="checks" id="checks-tyreWarning"></ul>
+          </div>
+        </div>
+      </div>
+      <div><button class="btn" data-goto="make">Next: Design</button></div>
+    </section>
+
+    <!-- MAKE -->
+    <section data-panel="make" hidden>
+      <div class="sechead">
+        <p class="eyebrow">Part 4 · about 15 minutes</p>
+        <h2>Design the charging screen</h2>
+        <p>Design what the driver display shows while SR8 charges. Use any tool: Figma, Canva, PowerPoint, paper and a photo, or AI. A rough design is fine.</p>
+      </div>
+      <div class="makegrid">
+        <div class="card" style="padding:20px">
+          <h3>The design must</h3>
+          <ul class="req">
+            <li>Show the three energy sources: the battery from a plug, hydrogen from a pump and solar from the roof. Two or three sources can work at the same time.</li>
+            <li>Show how much each source adds now, and when the car is ready to drive.</li>
+            <li>Be easy to read from outside the car, through the side window.</li>
+            <li>Follow the brief.</li>
+          </ul>
+          <div class="drop" style="margin-top:18px">
+            <label for="makeFile" class="muted">Upload your design: one image, PNG or JPG.</label>
+            <input id="makeFile" type="file" accept="image/png,image/jpeg,image/webp">
+            <img id="makePreview" alt="Your charging-screen design" hidden>
+            <p class="err" id="makeErr" role="alert"></p>
+          </div>
+        </div>
+        <div style="display:grid;gap:16px">
+          <div class="field"><label for="mk1">Which decision are you most sure about? Why?</label><textarea id="mk1" maxlength="500"></textarea></div>
+          <div class="field"><label for="mk2">Which idea did you try and not use? Why?</label><textarea id="mk2" maxlength="500"></textarea></div>
+          <div class="field"><label for="mk3">If you used AI, what did it do wrong? How did you correct it?</label><textarea id="mk3" maxlength="500"></textarea></div>
+        </div>
+      </div>
+      <div style="margin-top:20px"><button class="btn" data-goto="submit">Next: Submit</button></div>
+    </section>
+
+    <!-- SUBMIT -->
+    <section data-panel="submit" hidden>
+      <div class="sechead">
+        <p class="eyebrow">Finish</p>
+        <h2>Submit</h2>
+        <p>Check your work. Then click Submit. You can submit before the time ends.</p>
+      </div>
+      <div class="summary" id="summary"></div>
+      <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap"><button class="btn primary" id="submitBtn">Submit my test</button></div>
+      <p class="err" id="submitErr" role="alert" style="margin-top:10px"></p>
+    </section>
+  </main>
+</div>
+
+<!-- ───────────── DONE ───────────── -->
+<div id="done" class="wrap done" hidden>
+  <p class="eyebrow">Finished</p>
+  <h1 id="doneTitle">Thank you. We have your test.</h1>
+  <p class="muted" id="doneText"></p>
+  <div id="doneFallback" class="card" style="padding:18px;display:grid;gap:12px" hidden>
+    <p id="fallbackText"></p>
+    <div><button class="btn small" id="resendBtn" type="button">Try to send again</button></div>
+  </div>
+  <div><button class="btn" id="downloadBtn">Download a copy of your answers</button></div>
+</div>
+
+<dialog class="lb" id="lightbox">
+  <div class="bar"><span id="lbCap"></span><button class="btn small" id="lbClose" type="button">Close</button></div>
+  <img id="lbImg" alt="">
+</dialog>
+
+<script>
+/* ═════════════ CONFIG: edit these before deploying ═════════════ */
+const CONFIG = {
+  // Google Apps Script web-app URL (see README). Empty = candidates download a file and email it.
+  SUBMIT_URL: "",
+  // Shown to candidates for questions.
+  CONTACT_EMAIL: "",
+};
+/* ═══════════════════════════════════════════════════════════════ */
+
+const VERSION = "2026.10-2";        // changing this resets every test in progress: never change it during the test window
+const STORE_KEY = "sr8-infotainment-aptitude-" + VERSION;
+const PREVIEW = new URLSearchParams(location.search).has("preview");
+
+// Neutral file names, so the order can't be read from them. The reference ranking lives in grading/, not here.
+const DESIGNS = ["dir-1d20f8.jpg", "dir-38333e.jpg", "dir-92c516.jpg", "dir-e68682.jpg", "dir-fc6916.jpg"];
+
+// Part 2 items. fs: font size in display pixels at the middle size. h: the item's markup.
+const ARROW_L = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3 2 12l9 9v-5.5h11v-7H11z" fill="currentColor"/></svg>';
+const ARROW_R = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3l9 9-9 9v-5.5H2v-7h11z" fill="currentColor"/></svg>';
+const LAMPS = ["HAZ", "MAIN", "LAMP", "F-FOG", "R-FOG", "BRAKE", "ESC", "AIRBAG", "HV", "12V", "H₂"];
+const CHIPS = [
+  {id:"speed",         k:"num",     fs:120, h:'<span class="l">90</span><span class="s">km/h</span>'},
+  {id:"drive",         k:"drive",   fs:64,  h:'<span class="l"><i>P</i><i>R</i><i>N</i><b>D</b></span>'},
+  {id:"ready",         k:"ok",      fs:36,  h:'<span class="l">● READY</span>'},
+  {id:"power",         k:"num",     fs:80,  h:'<span class="l">28 kW</span><span class="s">power</span>'},
+  {id:"hydrogen",      k:"h2",      fs:52,  h:'<span class="l">H₂ 63%</span><span class="bar"><i style="width:63%"></i></span>'},
+  {id:"battery",       k:"bat",     fs:52,  h:'<span class="l">Battery 78%</span><span class="bar"><i style="width:78%"></i></span>'},
+  {id:"solar",         k:"num",     fs:46,  h:'<span class="l">340 W</span><span class="s">solar</span>'},
+  {id:"fuelcell",      k:"num",     fs:46,  h:'<span class="l">11.7 kW</span><span class="s">fuel cell</span>'},
+  {id:"range",         k:"num",     fs:80,  h:'<span class="l">823 km</span><span class="s">range</span>'},
+  {id:"toempty",       k:"num",     fs:46,  h:'<span class="l">9:08 h</span><span class="s">time to empty</span>'},
+  {id:"turn",          k:"num",     fs:64,  h:'<span class="l">↱ 400 m</span><span class="s">Swifthome Ave</span>'},
+  {id:"tyre",          k:"warn",    fs:38,  h:'<span class="l">REAR LEFT 24 PSI</span>'},
+  {id:"belt",          k:"fault",   fs:38,  h:'<span class="l">PASSENGER SEATBELT</span>'},
+  {id:"indL",          k:"go",      fs:64,  h:'<span class="l">' + ARROW_L + '</span>'},
+  {id:"indR",          k:"go",      fs:64,  h:'<span class="l">' + ARROW_R + '</span>'},
+  {id:"lamps",         k:"lamps",   fs:38,  h:'<span class="l">' + LAMPS.map(x=>`<i${x==="LAMP"?' class="on"':""}>${x}</i>`).join("") + '</span><span class="s">telltale lamps</span>'},
+  {id:"odo",           k:"num",     fs:38,  h:'<span class="l">12 482 km</span><span class="s">odometer</span>'},
+  {id:"trip",          k:"num",     fs:38,  h:'<span class="l">185.2 km</span><span class="s">trip</span>'},
+  {id:"temp",          k:"num",     fs:38,  h:'<span class="l">10 °C</span><span class="s">outside</span>'},
+  {id:"clock",         k:"num",     fs:44,  h:'<span class="l">14:32</span>'},
+  {id:"message",       k:"txt",     fs:34,  h:'<span class="l">Alex: u still coming tonight?</span><span class="s">message</span>'},
+  {id:"insta",         k:"txt",     fs:34,  h:'<span class="l">Instagram · 3 new likes</span>'},
+  {id:"music",         k:"txt",     fs:34,  h:'<span class="l">♫ Midnight City</span><span class="s">now playing</span>'},
+  {id:"settings",      k:"txt",     fs:34,  h:'<span class="l">⚙ Settings menu</span>'},
+  {id:"gpsSpeed",      k:"num",     fs:64,  h:'<span class="l">89</span><span class="s">km/h · GPS</span>'},
+  {id:"batteryOrange", k:"h2",      fs:52,  h:'<span class="l">Battery 78%</span><span class="bar"><i style="width:78%"></i></span>'},
+  {id:"tyreLamp",      k:"warn",    fs:64,  h:'<span class="l">(!)</span><span class="s">tyre lamp</span>'},
+  {id:"rangeRed",      k:"num red", fs:80,  h:'<span class="l">823 km</span><span class="s">range</span>'},
+];
+const SIZES = [0.5, 0.65, 0.8, 1, 1.25, 1.6, 2, 2.5];   // multipliers on each item's base size; the index is stored
+const MID = SIZES.indexOf(1);
+
+const STARTERS = {
+  speedText:
+`function speedText(reading) {
+  // reading.kmh   : true speed in km/h
+  // reading.ageMs : age of the reading, in milliseconds
+  return String(Math.round(reading.kmh));
+}
+`,
+  tyreWarning:
+`function tyreWarning(kpa) {
+  // kpa.fl, kpa.fr, kpa.rl, kpa.rr : pressures in kPa, or null if the sensor failed
+  return "";
+}
+`,
+};
+
+const VISIBLE_CHECKS = {
+  speedText: [
+    {input:{kmh:90, ageMs:20},  expect:"90", label:"90 km/h, new reading"},
+    {input:{kmh:42, ageMs:900}, expect:"--", label:"42 km/h, but the reading is 900 ms old"},
+  ],
+  tyreWarning: [
+    {input:{fl:230, fr:231, rl:228, rr:229}, expect:"",                 label:"all four tyres normal"},
+    {input:{fl:230, fr:231, rl:165, rr:229}, expect:"REAR LEFT 24 PSI", label:"rear left at 165 kPa"},
+  ],
+};
+
+/* ───────── helpers ───────── */
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+function hash32(str){ let h=2166136261; for(const c of str){ h^=c.charCodeAt(0); h=Math.imul(h,16777619); } return h>>>0; }
+function seededShuffle(arr, seed){ const a=[...arr]; let s=hash32(seed)||1; for(let i=a.length-1;i>0;i--){ s=Math.imul(s^(s>>>15),2246822519)>>>0; const j=s%(i+1); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* ───────── state ───────── */
+let S = load() || fresh();
+function fresh(){
+  return {stage:"intro", version:VERSION, candidate:{}, startedAt:null, activeMs:0, partMs:{}, sessions:1,
+          tab:"brief", rank:{order:{}, best:"", worst:"", shown:[]}, arrange:{items:{}, note:""}, code:{src:{...STARTERS}, visible:{}},
+          make:{image:"", decision:"", rejected:"", ai:""}, events:[], submittedAt:null, submitReason:"", sent:false};
+}
+function load(){ try{ const v = JSON.parse(localStorage.getItem(STORE_KEY)); return v && v.version===VERSION ? v : null; }catch(e){ return null; } }
+let saveWarned = false;
+function save(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }
+  catch(e){
+    try{ const copy = {...S, make:{...S.make, image:""}}; localStorage.setItem(STORE_KEY, JSON.stringify(copy)); }catch(_){}
+    if(!saveWarned){ saveWarned = true; $("#makeErr").textContent = "Your image is too big to save automatically. It is still attached. Do not refresh the page."; }
+  }
+}
+function log(type, data){ S.events.push({t:Date.now(), type, ...(data||{})}); if(S.events.length>600) S.events.shift(); }
+
+/* ───────── network ───────── */
+function send(payload){
+  if(PREVIEW || !CONFIG.SUBMIT_URL) return Promise.resolve(false);
+  // text/plain keeps this a simple request; Apps Script reads the raw body.
+  return fetch(CONFIG.SUBMIT_URL, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload)})
+    .then(()=>true).catch(()=>false);
+}
+
+/* ───────── screens ───────── */
+function show(stage){
+  $("#intro").hidden = stage!=="intro";
+  $("#test").hidden = stage!=="test";
+  $("#done").hidden = stage!=="done";
+  $("#previewBanner").hidden = !PREVIEW;
+}
+
+/* ───────── intro ───────── */
+if(CONFIG.CONTACT_EMAIL){
+  const m = esc(CONFIG.CONTACT_EMAIL);
+  $("#contactLine").innerHTML = `If you have questions, email <a href="mailto:${m}">${m}</a>.`;
+}
+const readBox = $("#fRead"), startBtn = $("#startBtn");
+const syncStart = ()=>{ startBtn.disabled = !readBox.checked; };
+readBox.addEventListener("change", ()=>{ syncStart(); $("#startErr").textContent = ""; });
+syncStart();
+$("#startForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const err = $("#startErr"); err.textContent = "";
+  if(!readBox.checked){ err.textContent = "Read the instructions. Then select the check box."; return; }
+  const c = {name:$("#fName").value.trim(), zid:$("#fZid").value.trim().toLowerCase(), email:$("#fEmail").value.trim(), year:$("#fYear").value};
+  if(PREVIEW){ c.name ||= "Preview"; c.zid ||= "z0000000"; c.email ||= "preview@example.com"; c.year ||= "Preview"; }
+  if(!c.name || !c.email || !c.year){ err.textContent = "Enter your name, your email and your year of study."; return; }
+  if(!/^z\d{7}$/.test(c.zid)){ err.textContent = "Enter your zID as z and seven digits, for example z1234567."; return; }
+  S = fresh(); S.candidate = c; S.startedAt = Date.now(); S.stage = "test";
+  log("start"); save();
+  send({type:"start", version:VERSION, candidate:c, startedAt:new Date(S.startedAt).toISOString()});
+  enterTest(false);
+});
+
+/* ───────── test shell ───────── */
+function enterTest(resumed){
+  show("test");
+  if(resumed){ S.sessions = (S.sessions||1) + 1; log("resume"); }
+  lastTick = Date.now();
+  buildRank(); buildArrange(); buildCode(); buildMake();
+  selectTab(S.tab || "brief");
+  clearInterval(window.__t); window.__t = setInterval(()=>{ account(); save(); }, 10000);
+}
+// There is no time limit and no visible timer. Time is recorded quietly: in total, and per part while the page is visible.
+let lastTick = Date.now();
+function account(force){
+  const now = Date.now();
+  if(S.stage==="test" && (force || document.visibilityState==="visible")){
+    const d = Math.min(now - lastTick, 60000);          // a laptop asleep with the page open does not count
+    S.activeMs = (S.activeMs||0) + d; S.partMs = S.partMs || {}; S.partMs[S.tab] = (S.partMs[S.tab]||0) + d;
+  }
+  lastTick = now;
+}
+document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="hidden"){ account(true); save(); } else lastTick = Date.now(); });
+window.addEventListener("pagehide", ()=>{ if(document.visibilityState==="visible"){ account(); save(); } });
+function selectTab(name){
+  account(); S.tab = name; log("tab", {tab:name}); save();
+  $$("nav.tabs button").forEach(b=>b.setAttribute("aria-selected", String(b.dataset.tab===name)));
+  $$("[data-panel]").forEach(p=>p.hidden = p.dataset.panel!==name);
+  if(name==="arrange") requestAnimationFrame(renderArrange);
+  if(name==="submit") renderSummary();
+  window.scrollTo({top:0});
+  markTabs();
+}
+$$("nav.tabs button").forEach(b=>b.addEventListener("click", ()=>selectTab(b.dataset.tab)));
+document.addEventListener("click", e=>{ const g = e.target.closest("[data-goto]"); if(g) selectTab(g.dataset.goto); });
+
+function partDone(){
+  const ranked = Object.keys(S.rank.order).length;
+  const reasons = [S.rank.best, S.rank.worst].filter(x=>(x||"").trim()).length;
+  const placed = Object.keys(S.arrange.items).length;
+  const code = ["speedText","tyreWarning"].filter(f=>S.code.src[f].trim()!==STARTERS[f].trim()).length;
+  const make = (S.make.image?1:0) + [S.make.decision,S.make.rejected,S.make.ai].filter(x=>x.trim()).length;
+  return {ranked, reasons, placed, code, make};
+}
+function markTabs(){
+  const d = partDone();
+  const done = {rank:d.ranked===DESIGNS.length && d.reasons===2, arrange:d.placed>0, code:d.code===2, make:d.make===4};
+  $$("nav.tabs button").forEach(b=>{ const t=b.querySelector(".tick"); if(t) t.remove(); if(done[b.dataset.tab]) b.insertAdjacentHTML("beforeend",'<span class="tick" aria-label="done">✓</span>'); });
+}
+
+/* ───────── part 1: rank ───────── */
+const LETTERS = "ABCDE";
+function buildRank(){
+  if(!S.rank.shown.length) S.rank.shown = seededShuffle(DESIGNS, S.candidate.zid + "rank");
+  $("#rankBest").value = S.rank.best; $("#rankWorst").value = S.rank.worst;
+  $("#rankBest").oninput = e=>{ S.rank.best = e.target.value; save(); markTabs(); };
+  $("#rankWorst").oninput = e=>{ S.rank.worst = e.target.value; save(); markTabs(); };
+  renderRank(); save();
+}
+function renderRank(){
+  const host = $("#rankList"); host.innerHTML = "";
+  S.rank.shown.forEach((file, i)=>{
+    const mine = S.rank.order[file];
+    const card = document.createElement("div"); card.className = "card design" + (mine ? " ranked" : "");
+    card.innerHTML = `
+      <div class="shot">
+        <img src="img/${file}" alt="Design ${LETTERS[i]}: a driver display design" width="1600" height="600" loading="lazy">
+        <span class="tag">${LETTERS[i]}</span>
+        <button type="button" class="zoom" data-zoom="${file}" data-cap="Design ${LETTERS[i]}">Full size</button>
+      </div>
+      <div class="rankbar" role="group" aria-label="Rank for design ${LETTERS[i]}">
+        <span class="lbl">Rank</span>
+        ${[1,2,3,4,5].map(n=>`<button type="button" data-rank="${n}" aria-pressed="${mine===n}" aria-label="Rank ${n}">${n}</button>`).join("")}
+        <span class="ends">1 is best</span>
+      </div>`;
+    card.querySelectorAll("[data-rank]").forEach(b=>b.addEventListener("click", ()=>{
+      const n = +b.dataset.rank;
+      // a rank belongs to one design: taking it from another design swaps the two
+      const holder = Object.keys(S.rank.order).find(f=>S.rank.order[f]===n && f!==file);
+      if(holder){ if(mine) S.rank.order[holder] = mine; else delete S.rank.order[holder]; }
+      if(mine===n) delete S.rank.order[file]; else S.rank.order[file] = n;
+      log("rank", {file, n}); save(); renderRank(); markTabs();
+    }));
+    host.appendChild(card);
+  });
+}
+document.addEventListener("click", e=>{
+  const z = e.target.closest("[data-zoom]"); if(!z) return;
+  $("#lbImg").src = "img/" + z.dataset.zoom; $("#lbImg").alt = z.dataset.cap; $("#lbCap").textContent = z.dataset.cap;
+  $("#lightbox").showModal();
+});
+$("#lbClose").addEventListener("click", ()=>$("#lightbox").close());
+$("#lightbox").addEventListener("click", e=>{ if(e.target.id==="lightbox") $("#lightbox").close(); });
+
+/* ───────── part 2: arrange ───────── */
+let trayOrder = [], drag = null, selectedChip = null;
+function buildArrange(){
+  trayOrder = seededShuffle(CHIPS.map(c=>c.id), S.candidate.zid + "tray");
+  $("#arrNote").value = S.arrange.note || "";
+  $("#arrNote").oninput = e=>{ S.arrange.note = e.target.value; save(); };
+  renderArrange();
+}
+function renderArrange(){
+  const stage = $("#stage"), tray = $("#tray");
+  const k = stage.clientWidth / 1920 || 0.5;
+  stage.innerHTML = ""; tray.innerHTML = "";
+  for(const id of trayOrder){
+    const c = CHIPS.find(x=>x.id===id), it = S.arrange.items[id];
+    const el = document.createElement("div");
+    el.className = `chip ${c.k}`; el.dataset.id = id; el.innerHTML = c.h;
+    if(it){
+      el.classList.add("placed"); if(selectedChip===id) el.classList.add("sel");
+      el.style.left = (it.x*100)+"%"; el.style.top = (it.y*100)+"%";
+      el.style.setProperty("--k", k); el.style.setProperty("--fs", (c.fs * SIZES[it.size]) + "px");
+      el.insertAdjacentHTML("beforeend", `<span class="ctl"><button type="button" data-act="down" aria-label="Smaller">−</button><button type="button" data-act="up" aria-label="Bigger">+</button><button type="button" data-act="off" aria-label="Remove from the display">×</button></span>`);
+      stage.appendChild(el);
+    } else tray.appendChild(el);
+    el.addEventListener("pointerdown", startDrag);
+  }
+  // keep every item fully on the display, and record its box as fractions of the display for scoring
+  if(stage.clientWidth){
+    const r0 = stage.getBoundingClientRect();
+    $$(".placed", stage).forEach(el=>{
+      const it = S.arrange.items[el.dataset.id];
+      let r = el.getBoundingClientRect();
+      const dx = Math.max(0, r0.left - r.left) - Math.max(0, r.right - r0.right);
+      const dy = Math.max(0, r0.top - r.top) - Math.max(0, r.bottom - r0.bottom);
+      if(dx || dy){
+        it.x = +(it.x + dx/r0.width).toFixed(4); it.y = +(it.y + dy/r0.height).toFixed(4);
+        el.style.left = (it.x*100)+"%"; el.style.top = (it.y*100)+"%"; r = el.getBoundingClientRect();
+      }
+      it.box = [(r.left-r0.left)/r0.width, (r.top-r0.top)/r0.height, (r.right-r0.left)/r0.width, (r.bottom-r0.top)/r0.height].map(v=>+v.toFixed(4));
+      el.classList.toggle("below", it.box[1] < 0.1);      // buttons under items at the top edge
+    });
+    save();
+  }
+  markTabs();
+}
+window.addEventListener("resize", ()=>{ if(S.tab==="arrange" && S.stage==="test") renderArrange(); });
+document.addEventListener("pointerdown", e=>{ if(selectedChip && !e.target.closest(".chip")){ selectedChip = null; if(S.tab==="arrange") renderArrange(); } });
+
+function startDrag(e){
+  const act = e.target.closest("[data-act]");
+  if(act){
+    e.preventDefault(); e.stopPropagation();
+    const id = e.currentTarget.dataset.id, it = S.arrange.items[id];
+    if(act.dataset.act==="off") delete S.arrange.items[id];
+    if(act.dataset.act==="up") it.size = Math.min(SIZES.length-1, it.size+1);
+    if(act.dataset.act==="down") it.size = Math.max(0, it.size-1);
+    selectedChip = act.dataset.act==="off" ? null : id;
+    log("arrange", {id, act:act.dataset.act}); save(); renderArrange(); return;
+  }
+  e.preventDefault();
+  const el = e.currentTarget, id = el.dataset.id, r = el.getBoundingClientRect();
+  const ghost = el.cloneNode(true); ghost.classList.add("ghost"); ghost.classList.remove("placed", "sel");
+  ghost.querySelector(".ctl")?.remove();
+  if(el.classList.contains("placed")){ ghost.style.cssText = el.style.cssText; ghost.classList.add("placed"); ghost.style.position = "fixed"; }
+  ghost.style.left = e.clientX+"px"; ghost.style.top = e.clientY+"px";
+  document.body.appendChild(ghost); el.style.opacity = ".25";
+  drag = {id, el, ghost, dx:e.clientX-(r.left+r.width/2), dy:e.clientY-(r.top+r.height/2), x0:e.clientX, y0:e.clientY};
+  window.addEventListener("pointermove", moveDrag); window.addEventListener("pointerup", endDrag, {once:true});
+}
+let scrollTimer = null;
+function moveDrag(e){
+  if(!drag) return;
+  drag.ghost.style.left = (e.clientX-drag.dx)+"px"; drag.ghost.style.top = (e.clientY-drag.dy)+"px";
+  // near the top or bottom of the window, scroll the page so that the whole display can be reached
+  const top = 90, bottom = innerHeight - 60;
+  drag.vy = e.clientY < top ? -(top - e.clientY)/3 : e.clientY > bottom ? (e.clientY - bottom)/3 : 0;
+  if(drag.vy && !scrollTimer) scrollTimer = setInterval(()=>{ if(!drag || !drag.vy){ clearInterval(scrollTimer); scrollTimer = null; return; } window.scrollBy(0, drag.vy); }, 16);
+}
+function endDrag(e){
+  window.removeEventListener("pointermove", moveDrag);
+  clearInterval(scrollTimer); scrollTimer = null;
+  if(!drag) return;
+  const r0 = $("#stage").getBoundingClientRect(), cx = e.clientX-drag.dx, cy = e.clientY-drag.dy;
+  const inside = e.clientX>=r0.left && e.clientX<=r0.right && e.clientY>=r0.top && e.clientY<=r0.bottom;
+  const prev = S.arrange.items[drag.id];
+  const click = Math.hypot(e.clientX-drag.x0, e.clientY-drag.y0) < 5;
+  if(click && prev){                       // a click, not a drag: select the item to show its buttons
+    selectedChip = selectedChip===drag.id ? null : drag.id;
+    drag.ghost.remove(); drag.el.style.opacity = ""; drag = null; renderArrange(); return;
+  }
+  if(inside){
+    S.arrange.items[drag.id] = {x:+Math.min(1,Math.max(0,(cx-r0.left)/r0.width)).toFixed(4), y:+Math.min(1,Math.max(0,(cy-r0.top)/r0.height)).toFixed(4), size: prev ? prev.size : MID};
+    selectedChip = drag.id;
+    log("arrange", {id:drag.id, act:prev?"move":"place"});
+  } else if(prev){ delete S.arrange.items[drag.id]; log("arrange", {id:drag.id, act:"off"}); }
+  drag.ghost.remove(); drag = null; save(); renderArrange();
+}
+
+/* ───────── part 3: code ───────── */
+function buildCode(){
+  [["speedText","#code1"],["tyreWarning","#code2"]].forEach(([fn, sel])=>{
+    const ta = $(sel); ta.value = S.code.src[fn];
+    ta.oninput = ()=>{ S.code.src[fn] = ta.value; save(); markTabs(); };
+    ta.onkeydown = e=>{ if(e.key==="Tab" && !e.shiftKey){ e.preventDefault(); const s=ta.selectionStart; ta.setRangeText("  ", s, ta.selectionEnd, "end"); ta.dispatchEvent(new Event("input")); } };
+    if(S.code.visible[fn]) showChecks(fn, S.code.visible[fn]);
+  });
+}
+function runChecks(source, fn, checks){
+  return new Promise(resolve=>{
+    const body = `${source}\n;self.onmessage = (e) => { const out = []; for (const c of e.data) { try { const v = ${fn}(c.input); out.push({ok: v === c.expect, got: typeof v === "string" ? JSON.stringify(v) : String(v)}); } catch (err) { out.push({ok:false, got:"error: " + err.message}); } } self.postMessage(out); };`;
+    let w; try{ w = new Worker(URL.createObjectURL(new Blob([body], {type:"text/javascript"}))); }
+    catch(err){ return resolve(checks.map(()=>({ok:false, got:"could not run: " + err.message}))); }
+    const t = setTimeout(()=>{ w.terminate(); resolve(checks.map(()=>({ok:false, got:"stopped after 1.5 seconds: is there an endless loop?"}))); }, 1500);
+    w.onmessage = e=>{ clearTimeout(t); w.terminate(); resolve(e.data); };
+    w.onerror = e=>{ e.preventDefault(); clearTimeout(t); w.terminate(); resolve(checks.map(()=>({ok:false, got:"error: " + (e.message||"the code does not run")}))); };
+    w.postMessage(checks.map(c=>({input:c.input, expect:c.expect})));
+  });
+}
+function showChecks(fn, res){
+  $("#checks-"+fn).innerHTML = VISIBLE_CHECKS[fn].map((c,i)=>{
+    const r = res[i] || {ok:false, got:"not run"};
+    return `<li class="${r.ok?"pass":"fail"}"><span>${esc(c.label)}: expected <code>${esc(JSON.stringify(c.expect))}</code>${r.ok?"":`, got <code>${esc(r.got)}</code>`}</span></li>`;
+  }).join("");
+}
+document.addEventListener("click", async e=>{
+  const run = e.target.closest("[data-run]"), reset = e.target.closest("[data-reset]");
+  if(run){ const fn = run.dataset.run; const res = await runChecks(S.code.src[fn], fn, VISIBLE_CHECKS[fn]); S.code.visible[fn] = res; log("run", {fn, pass:res.filter(r=>r.ok).length}); save(); showChecks(fn, res); }
+  if(reset && confirm("Put the starting code back? You will lose your changes to this function.")){
+    const fn = reset.dataset.reset; S.code.src[fn] = STARTERS[fn]; S.code.visible[fn] = null; save(); buildCode(); $("#checks-"+fn).innerHTML = ""; markTabs();
+  }
+});
+
+/* ───────── part 4: design ───────── */
+function buildMake(){
+  [["#mk1","decision"],["#mk2","rejected"],["#mk3","ai"]].forEach(([sel,key])=>{ const t=$(sel); t.value = S.make[key]; t.oninput = ()=>{ S.make[key]=t.value; save(); markTabs(); }; });
+  if(S.make.image){ $("#makePreview").src = S.make.image; $("#makePreview").hidden = false; }
+}
+$("#makeFile").addEventListener("change", e=>{
+  const f = e.target.files[0], err = $("#makeErr"); err.textContent = "";
+  if(!f) return;
+  if(f.size > 15*1024*1024){ err.textContent = "That file is more than 15 MB. Export a smaller image."; return; }
+  const img = new Image(), url = URL.createObjectURL(f);
+  img.onload = ()=>{
+    const scale = Math.min(1, 1920/img.width), c = document.createElement("canvas");
+    c.width = Math.round(img.width*scale); c.height = Math.round(img.height*scale);
+    const g = c.getContext("2d"); g.fillStyle = "#000"; g.fillRect(0,0,c.width,c.height); g.drawImage(img,0,0,c.width,c.height);
+    S.make.image = c.toDataURL("image/jpeg", 0.85); URL.revokeObjectURL(url);
+    $("#makePreview").src = S.make.image; $("#makePreview").hidden = false; log("upload"); save(); markTabs();
+  };
+  img.onerror = ()=>{ err.textContent = "The page cannot read that file as an image. Use PNG or JPG."; };
+  img.src = url;
+});
+
+/* ───────── submit ───────── */
+function renderSummary(){
+  const d = partDone();
+  $("#summary").innerHTML = [
+    ["Part 1 · Rank", `${d.ranked} of ${DESIGNS.length} ranked, ${d.reasons} of 2 reasons`],
+    ["Part 2 · Arrange", `${d.placed} item${d.placed===1?"":"s"} on the display`],
+    ["Part 3 · Code", `${d.code} of 2 functions changed`],
+    ["Part 4 · Design", `${S.make.image?"image uploaded":"no image"}, ${[S.make.decision,S.make.rejected,S.make.ai].filter(x=>x.trim()).length} of 3 answers`],
+  ].map(([a,b])=>`<div><b>${a}</b><span class="muted">${b}</span></div>`).join("");
+}
+$("#submitBtn").addEventListener("click", ()=>{ if(confirm("Submit now? You cannot change your answers after you submit.")) submit("button"); });
+
+let submitting = false;
+async function submit(reason){
+  if(submitting || S.stage!=="test") return; submitting = true;
+  clearInterval(window.__t);
+  account(); S.submittedAt = Date.now(); S.submitReason = reason; S.stage = "done"; S.sent = false; log("submit", {reason}); save();
+  S.sent = await send(payload()); save();
+  showDone();
+}
+function showDone(){
+  show("done");
+  const ok = S.sent && !PREVIEW;
+  $("#doneTitle").textContent = PREVIEW ? "Preview finished." : ok ? "Thank you. We have your test." : "Your test is finished.";
+  $("#doneText").textContent = PREVIEW ? "The page did not send anything. Download the file to see what a submission contains."
+    : ok ? "You do not need to send anything else. We will contact you about interviews after applications close." : "";
+  $("#doneText").hidden = !$("#doneText").textContent;
+  $("#doneFallback").hidden = ok || PREVIEW;
+  $("#fallbackText").innerHTML = (CONFIG.SUBMIT_URL ? "The page could not send your test." : "Online submission is off for this copy of the test.")
+    + ` Download your answers. Then email the file to <b>${esc(CONFIG.CONTACT_EMAIL || "the infotainment lead")}</b>.`;
+  $("#resendBtn").hidden = !CONFIG.SUBMIT_URL;
+}
+$("#resendBtn").addEventListener("click", async ()=>{
+  $("#resendBtn").disabled = true;
+  S.sent = await send(payload()); save(); showDone();
+  $("#resendBtn").disabled = false;
+});
+function payload(){
+  const mins = ms=>+((ms||0)/60000).toFixed(2);
+  return {type:"submit", version:VERSION, candidate:S.candidate,
+    startedAt:new Date(S.startedAt).toISOString(), submittedAt:new Date(S.submittedAt).toISOString(),
+    minutesUsed:mins(S.submittedAt-S.startedAt), activeMinutes:mins(S.activeMs),
+    partMinutes:Object.fromEntries(Object.entries(S.partMs||{}).map(([k,v])=>[k,mins(v)])), sessions:S.sessions||1,
+    submitReason:S.submitReason,
+    rank:{order:S.rank.order, shown:S.rank.shown, best:S.rank.best, worst:S.rank.worst},
+    arrange:{items:S.arrange.items, note:S.arrange.note},
+    code:{speedText:S.code.src.speedText, tyreWarning:S.code.src.tyreWarning, visible:S.code.visible},
+    make:{image:S.make.image, decision:S.make.decision, rejected:S.make.rejected, ai:S.make.ai},
+    events:S.events, userAgent:navigator.userAgent};
+}
+$("#downloadBtn").addEventListener("click", ()=>{
+  const blob = new Blob([JSON.stringify(payload(), null, 2)], {type:"application/json"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = `sr8-infotainment-${S.candidate.zid||"submission"}.json`; document.body.appendChild(a); a.click(); a.remove();
+});
+
+/* ───────── boot ───────── */
+if(S.stage==="test") enterTest(true);
+else if(S.stage==="done") showDone();
+else show("intro");
+</script>
+</body>
+</html>
