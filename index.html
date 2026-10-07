@@ -72,13 +72,6 @@ main.test{padding-block:32px 96px}
 .sechead{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;max-width:78ch}
 .sechead p{color:var(--mid)}
 
-/* brief */
-.brief{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
-.rules{counter-reset:r;list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.rules li{counter-increment:r;display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:baseline;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
-.rules li::before{content:counter(r);font-family:Oswald,sans-serif;font-size:20px;color:var(--acc)}
-.rules li span{color:var(--mid);font-size:14px;display:block}
-
 /* rank */
 .rankgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,520px),1fr));gap:16px}
 .design{padding:12px;display:flex;flex-direction:column;gap:10px}
@@ -159,7 +152,7 @@ textarea.code{font-family:ui-monospace,'Cascadia Code',Consolas,monospace;font-s
 ol.steps{margin:0;padding-left:22px;color:var(--mid)} ol.steps li{margin:8px 0} ol.steps b{color:var(--ink);font-weight:500;word-break:break-all}
 
 @media (max-width:900px){
-  .intro,.brief,.codegrid,.makegrid{grid-template-columns:1fr}
+  .intro,.codegrid,.makegrid{grid-template-columns:1fr}
   .startcard{position:static}
 }
 @media (prefers-reduced-motion:no-preference){.rankbar button,.btn,nav.tabs button{transition:border-color .15s,background .15s,color .15s}}
@@ -217,7 +210,6 @@ ol.steps{margin:0;padding-left:22px;color:var(--mid)} ol.steps li{margin:8px 0} 
     <h3>Start the test</h3>
     <div class="field"><label for="fName">Full name</label><input id="fName" type="text" autocomplete="name" required></div>
     <div class="field"><label for="fZid">zID</label><input id="fZid" type="text" placeholder="z1234567" autocomplete="off" required></div>
-    <div class="field"><label for="fEmail">Email</label><input id="fEmail" type="email" autocomplete="email" required></div>
     <div class="field"><label for="fYear">Year of study</label>
       <select id="fYear" required><option value="">Choose</option><option>1st year</option><option>2nd year</option><option>3rd year</option><option>4th year</option><option>5th year or later</option><option>Postgraduate</option></select></div>
     <label class="check" for="fRead"><input type="checkbox" id="fRead"><span>I have read the instructions.</span></label>
@@ -233,7 +225,6 @@ ol.steps{margin:0;padding-left:22px;color:var(--mid)} ol.steps li{margin:8px 0} 
     <div class="wrap">
       <span class="brand">SR8 · Infotainment</span>
       <nav class="tabs" role="tablist" aria-label="Test parts">
-        <button role="tab" data-tab="brief">Brief</button>
         <button role="tab" data-tab="rank">1 Rank</button>
         <button role="tab" data-tab="arrange">2 Arrange</button>
         <button role="tab" data-tab="code">3 Code</button>
@@ -244,43 +235,18 @@ ol.steps{margin:0;padding-left:22px;color:var(--mid)} ol.steps li{margin:8px 0} 
   </header>
 
   <main class="test wrap">
-    <!-- BRIEF -->
-    <section data-panel="brief" hidden>
-      <div class="sechead">
-        <p class="eyebrow">Read this first</p>
-        <h2>The brief</h2>
-        <p>The driver display is behind the steering wheel. It is 1920 × 720 pixels. The driver reads it in less than two seconds, often in sunlight.</p>
-        <p>We mark all four parts against these rules. The rules stay on the Brief tab.</p>
-      </div>
-      <div class="brief">
-        <ol class="rules">
-          <li><div>Speed is the most important item. Make it the biggest item. Put it in the centre, straight ahead of the driver.</div></li>
-          <li><div>Use red only for a danger. Use amber only for a caution.</div></li>
-          <li><div>Hydrogen is always orange. The battery is always white.</div></li>
-          <li><div>Show each fact one time only.</div></li>
-          <li><div>A warning shows the problem in words.<span>For example: REAR LEFT 24 PSI, not only a symbol.</span></div></li>
-        </ol>
-        <ol class="rules" style="counter-reset:r 5">
-          <li><div>The driver display does not chat or entertain.<span>No messages, social media, music or video.</span></div></li>
-          <li><div>The driver reads the display but does not touch it.<span>No buttons, menus or scrolling.</span></div></li>
-          <li><div>Items do not overlap or touch.</div></li>
-          <li><div>The speedometer can show more than the true speed, but never less.</div></li>
-        </ol>
-      </div>
-      <div style="margin-top:28px"><button class="btn primary" data-goto="rank">Start part 1</button></div>
-    </section>
-
     <!-- RANK -->
     <section data-panel="rank" hidden>
       <div class="sechead">
         <p class="eyebrow">Part 1 · about 8 minutes</p>
         <h2>Rank the designs</h2>
-        <p>Rank the five designs for the driver, from 1 (best) to 5 (worst). Use the brief.</p>
+        <p>The driver display is behind the steering wheel. The driver reads it at a glance, often in sunlight. Rank these five designs from 1 (best) to 5 (worst).</p>
       </div>
       <div id="rankList" class="rankgrid"></div>
       <div class="card" style="padding:20px;margin-top:18px;display:grid;gap:14px;max-width:880px">
         <div class="field"><label for="rankBest">Why is your number 1 the best?</label><input type="text" id="rankBest" maxlength="240" autocomplete="off"></div>
         <div class="field"><label for="rankWorst">Why is your number 5 the worst?</label><input type="text" id="rankWorst" maxlength="240" autocomplete="off"></div>
+        <div class="field"><label for="rankNotes">Other comments <span class="dim">optional</span></label><textarea id="rankNotes" maxlength="1500"></textarea></div>
       </div>
       <div style="margin-top:18px"><button class="btn" data-goto="arrange">Next: Arrange</button></div>
     </section>
@@ -291,7 +257,7 @@ ol.steps{margin:0;padding-left:22px;color:var(--mid)} ol.steps li{margin:8px 0} 
         <p class="eyebrow">Part 2 · about 12 minutes</p>
         <h2>Arrange the display</h2>
         <p>This is the busiest moment for the driver display. The car is at 90 km/h, navigation is on, and there are two warnings.</p>
-        <p>Put each item that follows the brief on the display. Leave off each item that breaks the brief. Then arrange the display so that the driver can read it in two seconds.</p>
+        <p>Put the items that the driver needs on the display. Leave off the items that do not belong on a driver display. Then arrange the display so that the driver can read it at a glance.</p>
         <p class="dim">Drag items onto the display. Click an item on the display to change its size or to remove it.</p>
       </div>
       <div class="stage" id="stage" aria-label="Driver display"></div>
@@ -371,7 +337,6 @@ ol.steps{margin:0;padding-left:22px;color:var(--mid)} ol.steps li{margin:8px 0} 
             <li>Show the three energy sources: the battery from a plug, hydrogen from a pump and solar from the roof. Two or three sources can work at the same time.</li>
             <li>Show how much each source adds now, and when the car is ready to drive.</li>
             <li>Be easy to read from outside the car, through the side window.</li>
-            <li>Follow the brief.</li>
           </ul>
           <div class="drop" style="margin-top:18px">
             <label for="makeFile" class="muted">Upload your design: one image, PNG or JPG.</label>
@@ -442,6 +407,8 @@ const DESIGNS = ["dir-1d20f8.jpg", "dir-38333e.jpg", "dir-92c516.jpg", "dir-e686
 // Part 2 items. fs: font size in display pixels at the middle size. h: the item's markup.
 const ARROW_L = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3 2 12l9 9v-5.5h11v-7H11z" fill="currentColor"/></svg>';
 const ARROW_R = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3l9 9-9 9v-5.5H2v-7h11z" fill="currentColor"/></svg>';
+const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg>';
+const SEARCH = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15 15l6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
 const LAMPS = ["HAZ", "MAIN", "LAMP", "F-FOG", "R-FOG", "BRAKE", "ESC", "AIRBAG", "HV", "12V", "H₂"];
 const CHIPS = [
   {id:"speed",         k:"num",     fs:120, h:'<span class="l">90</span><span class="s">km/h</span>'},
@@ -464,14 +431,12 @@ const CHIPS = [
   {id:"trip",          k:"num",     fs:38,  h:'<span class="l">185.2 km</span><span class="s">trip</span>'},
   {id:"temp",          k:"num",     fs:38,  h:'<span class="l">10 °C</span><span class="s">outside</span>'},
   {id:"clock",         k:"num",     fs:44,  h:'<span class="l">14:32</span>'},
-  {id:"message",       k:"txt",     fs:34,  h:'<span class="l">Alex: u still coming tonight?</span><span class="s">message</span>'},
-  {id:"insta",         k:"txt",     fs:34,  h:'<span class="l">Instagram · 3 new likes</span>'},
-  {id:"music",         k:"txt",     fs:34,  h:'<span class="l">♫ Midnight City</span><span class="s">now playing</span>'},
-  {id:"settings",      k:"txt",     fs:34,  h:'<span class="l">⚙ Settings menu</span>'},
-  {id:"gpsSpeed",      k:"num",     fs:64,  h:'<span class="l">89</span><span class="s">km/h · GPS</span>'},
-  {id:"batteryOrange", k:"h2",      fs:52,  h:'<span class="l">Battery 78%</span><span class="bar"><i style="width:78%"></i></span>'},
-  {id:"tyreLamp",      k:"warn",    fs:64,  h:'<span class="l">(!)</span><span class="s">tyre lamp</span>'},
-  {id:"rangeRed",      k:"num red", fs:80,  h:'<span class="l">823 km</span><span class="s">range</span>'},
+  {id:"message",       k:"txt",     fs:34,  h:'<span class="l"><b>Alex</b>&nbsp;u still coming tonight?</span><span class="s">text message</span>'},
+  {id:"insta",         k:"txt",     fs:34,  h:'<span class="l">Instagram · 3 new likes</span><span class="s">notification</span>'},
+  {id:"video",         k:"txt",     fs:34,  h:'<span class="l">' + PLAY + ' F1 highlights · 12:04</span><span class="s">video</span>'},
+  {id:"game",          k:"txt",     fs:34,  h:'<span class="l">Tap to play · Flappy Bird</span><span class="s">game</span>'},
+  {id:"browser",       k:"txt",     fs:34,  h:'<span class="l">' + SEARCH + ' Search or type a web address</span><span class="s">web browser</span>'},
+  {id:"settings",      k:"txt",     fs:34,  h:'<span class="l">⚙ Settings menu</span><span class="s">tap to open</span>'},
 ];
 const SIZES = [0.5, 0.65, 0.8, 1, 1.25, 1.6, 2, 2.5];   // multipliers on each item's base size; the index is stored
 const MID = SIZES.indexOf(1);
@@ -514,7 +479,7 @@ function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;
 let S = load() || fresh();
 function fresh(){
   return {stage:"intro", version:VERSION, candidate:{}, startedAt:null, activeMs:0, partMs:{}, sessions:1,
-          tab:"brief", rank:{order:{}, best:"", worst:"", shown:[]}, arrange:{items:{}, note:""}, code:{src:{...STARTERS}, visible:{}},
+          tab:"rank", rank:{order:{}, best:"", worst:"", notes:"", shown:[]}, arrange:{items:{}, note:""}, code:{src:{...STARTERS}, visible:{}},
           make:{image:"", decision:"", rejected:"", ai:""}, events:[], submittedAt:null, submitReason:"", sent:false};
 }
 function load(){ try{ const v = JSON.parse(localStorage.getItem(STORE_KEY)); return v && v.version===VERSION ? v : null; }catch(e){ return null; } }
@@ -558,10 +523,11 @@ $("#startForm").addEventListener("submit", async (e)=>{
   e.preventDefault();
   const err = $("#startErr"); err.textContent = "";
   if(!readBox.checked){ err.textContent = "Read the instructions. Then select the check box."; return; }
-  const c = {name:$("#fName").value.trim(), zid:$("#fZid").value.trim().toLowerCase(), email:$("#fEmail").value.trim(), year:$("#fYear").value};
-  if(PREVIEW){ c.name ||= "Preview"; c.zid ||= "z0000000"; c.email ||= "preview@example.com"; c.year ||= "Preview"; }
-  if(!c.name || !c.email || !c.year){ err.textContent = "Enter your name, your email and your year of study."; return; }
+  const c = {name:$("#fName").value.trim(), zid:$("#fZid").value.trim().toLowerCase(), year:$("#fYear").value};
+  if(PREVIEW){ c.name ||= "Preview"; c.zid ||= "z0000000"; c.year ||= "Preview"; }
+  if(!c.name || !c.year){ err.textContent = "Enter your name and your year of study."; return; }
   if(!/^z\d{7}$/.test(c.zid)){ err.textContent = "Enter your zID as z and seven digits, for example z1234567."; return; }
+  c.email = c.zid + "@unsw.edu.au";
   S = fresh(); S.candidate = c; S.startedAt = Date.now(); S.stage = "test";
   log("start"); save();
   send({type:"start", version:VERSION, candidate:c, startedAt:new Date(S.startedAt).toISOString()});
@@ -574,7 +540,8 @@ function enterTest(resumed){
   if(resumed){ S.sessions = (S.sessions||1) + 1; log("resume"); }
   lastTick = Date.now();
   buildRank(); buildArrange(); buildCode(); buildMake();
-  selectTab(S.tab || "brief");
+  const tabs = $$("nav.tabs button").map(b=>b.dataset.tab);
+  selectTab(tabs.includes(S.tab) ? S.tab : "rank");
   clearInterval(window.__t); window.__t = setInterval(()=>{ account(); save(); }, 10000);
 }
 // There is no time limit and no visible timer. Time is recorded quietly: in total, and per part while the page is visible.
@@ -622,6 +589,8 @@ function buildRank(){
   $("#rankBest").value = S.rank.best; $("#rankWorst").value = S.rank.worst;
   $("#rankBest").oninput = e=>{ S.rank.best = e.target.value; save(); markTabs(); };
   $("#rankWorst").oninput = e=>{ S.rank.worst = e.target.value; save(); markTabs(); };
+  $("#rankNotes").value = S.rank.notes || "";
+  $("#rankNotes").oninput = e=>{ S.rank.notes = e.target.value; save(); };
   renderRank(); save();
 }
 function renderRank(){
@@ -662,6 +631,7 @@ $("#lightbox").addEventListener("click", e=>{ if(e.target.id==="lightbox") $("#l
 /* ───────── part 2: arrange ───────── */
 let trayOrder = [], drag = null, selectedChip = null;
 function buildArrange(){
+  for(const id of Object.keys(S.arrange.items)) if(!CHIPS.some(c=>c.id===id)) delete S.arrange.items[id];
   trayOrder = seededShuffle(CHIPS.map(c=>c.id), S.candidate.zid + "tray");
   $("#arrNote").value = S.arrange.note || "";
   $("#arrNote").oninput = e=>{ S.arrange.note = e.target.value; save(); };
@@ -848,7 +818,7 @@ function payload(){
     minutesUsed:mins(S.submittedAt-S.startedAt), activeMinutes:mins(S.activeMs),
     partMinutes:Object.fromEntries(Object.entries(S.partMs||{}).map(([k,v])=>[k,mins(v)])), sessions:S.sessions||1,
     submitReason:S.submitReason,
-    rank:{order:S.rank.order, shown:S.rank.shown, best:S.rank.best, worst:S.rank.worst},
+    rank:{order:S.rank.order, shown:S.rank.shown, best:S.rank.best, worst:S.rank.worst, notes:S.rank.notes||""},
     arrange:{items:S.arrange.items, note:S.arrange.note},
     code:{speedText:S.code.src.speedText, tyreWarning:S.code.src.tyreWarning, visible:S.code.visible},
     make:{image:S.make.image, decision:S.make.decision, rejected:S.make.rejected, ai:S.make.ai},
